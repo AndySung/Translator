@@ -1,6 +1,10 @@
 package com.example.transalator;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -16,7 +20,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -62,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
         chineseToEnglish = findViewById(R.id.chineseToEnglish);
         englishToChinese = findViewById(R.id.englishToChinese);
     
+        // 检查并下载离线语音识别包
+        checkAndDownloadOfflineRecognitionModels();
+        
         // 初始化翻译器
         initTranslators();
     
@@ -162,6 +169,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void startSpeechRecognition() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        // 添加离线语音识别支持
+        intent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
+        
         // 修改这部分代码，确保正确设置语言
         if (chineseToEnglish.isChecked()) {
             // 如果是中译英，则设置中文识别
@@ -205,6 +215,118 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+
+    // 添加检查并下载离线语音识别模型的方法
+    private void checkAndDownloadOfflineRecognitionModels() {
+        // 直接尝试打开语音识别器，检查是否支持离线模式
+        SpeechRecognizer recognizer = SpeechRecognizer.createSpeechRecognizer(this);
+        Intent testIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        testIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
+        testIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        
+        // 设置一个临时的监听器来检测是否支持离线模式
+        recognizer.setRecognitionListener(new RecognitionListener() {
+            @Override
+            public void onReadyForSpeech(Bundle params) {
+                // 语音识别器准备就绪，可能支持离线模式
+                // 不要立即取消，让它有时间检测是否真的支持离线模式
+                new Handler().postDelayed(() -> {
+                    if (recognizer != null) {
+                        recognizer.cancel();
+                    }
+                }, 500);
+            }
+    
+            @Override
+            public void onError(int error) {
+                // 如果出现错误，可能不支持离线模式或需要下载语音包
+                if (error == SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS || 
+                    error == SpeechRecognizer.ERROR_NETWORK || 
+                    error == SpeechRecognizer.ERROR_NETWORK_TIMEOUT ||
+                    error == SpeechRecognizer.ERROR_NO_MATCH) {
+                    // 提示用户下载离线语音识别包
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setTitle("需要下载语音识别包")
+                            .setMessage("为了支持离线语音识别，需要下载语音识别包。是否现在下载？")
+                            .setPositiveButton("下载", (dialog, which) -> {
+                                try {
+                                    // 尝试直接打开语音设置
+                                    Intent intent = new Intent();
+                                    intent.setAction("android.settings.VOICE_INPUT_SETTINGS");
+                                    startActivity(intent);
+                                } catch (Exception e1) {
+                                    try {
+                                        // 如果上面的方法失败，尝试打开TTS设置
+                                        Intent ttsIntent = new Intent();
+                                        ttsIntent.setAction("com.android.settings.TTS_SETTINGS");
+                                        startActivity(ttsIntent);
+                                    } catch (Exception e2) {
+                                        try {
+                                            // 如果上面的方法也失败，尝试打开语言设置
+                                            Intent langIntent = new Intent(android.provider.Settings.ACTION_LOCALE_SETTINGS);
+                                            startActivity(langIntent);
+                                        } catch (Exception e3) {
+                                            // 所有方法都失败，提示用户手动设置
+                                            Toast.makeText(MainActivity.this, "无法自动打开设置，请手动前往设置->语言和输入法->语音设置下载语音包", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                }
+                            })
+                            .setNegativeButton("取消", null)
+                            .show();
+            }
+            if (recognizer != null) {
+                recognizer.destroy();
+            }
+        }
+    
+        // 实现其他必要的接口方法（可以留空）
+        @Override public void onBeginningOfSpeech() {}
+        @Override public void onRmsChanged(float rmsdB) {}
+        @Override public void onBufferReceived(byte[] buffer) {}
+        @Override public void onEndOfSpeech() {}
+        @Override public void onResults(Bundle results) {}
+        @Override public void onPartialResults(Bundle partialResults) {}
+        @Override public void onEvent(int eventType, Bundle params) {}
+    });
+    
+    // 尝试启动语音识别
+    try {
+        recognizer.startListening(testIntent);
+        // 设置一个延迟，然后取消识别（我们只是测试，不需要真正识别）
+        new Handler().postDelayed(() -> {
+            if (recognizer != null) {
+                recognizer.cancel();
+                recognizer.destroy();
+            }
+        }, 1000);
+    } catch (Exception e) {
+        // 如果启动失败，可能是设备不支持或需要下载语音包
+        showDownloadDialog();
+        if (recognizer != null) {
+            recognizer.destroy();
+        }
+    }
+}
+
+// 显示下载对话框的辅助方法
+private void showDownloadDialog() {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setTitle("需要下载语音识别包")
+            .setMessage("为了支持离线语音识别，需要下载语音识别包。是否现在下载？")
+            .setPositiveButton("下载", (dialog, which) -> {
+                try {
+                    // 尝试直接打开语音设置
+                    Intent intent = new Intent();
+                    intent.setAction("android.settings.VOICE_INPUT_SETTINGS");
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Toast.makeText(this, "无法打开语音设置，请手动前往设置->语言和输入法下载语音包", Toast.LENGTH_LONG).show();
+                }
+            })
+            .setNegativeButton("取消", null)
+            .show();
+}
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -314,6 +436,9 @@ public class MainActivity extends AppCompatActivity {
     
         recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+        // 添加离线语音识别支持
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
+        
         // 修改这部分代码，确保正确设置语言
         if (chineseToEnglish.isChecked()) {
             // 如果是中译英，则设置中文识别
