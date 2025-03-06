@@ -1,0 +1,8 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="org.vosk.models" >
+4
+5    <uses-sdk android:minSdkVersion="21" />
+5-->D:\Andy\android_project\nsc_nice\Translator\models\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest14366003298943655498.xml
+6
+7</manifest>

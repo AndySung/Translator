@@ -1,0 +1,25 @@
+-- Merging decision tree log ---
+manifest
+ADDED from D:\Andy\android_project\nsc_nice\Translator\models\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest14366003298943655498.xml:2:13-83
+INJECTED from D:\Andy\android_project\nsc_nice\Translator\models\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest14366003298943655498.xml:2:13-83
+INJECTED from D:\Andy\android_project\nsc_nice\Translator\models\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest14366003298943655498.xml:2:13-83
+	package
+		INJECTED from D:\Andy\android_project\nsc_nice\Translator\models\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest14366003298943655498.xml
+		ADDED from D:\Andy\android_project\nsc_nice\Translator\models\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest14366003298943655498.xml:2:13-83
+		INJECTED from D:\Andy\android_project\nsc_nice\Translator\models\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest14366003298943655498.xml
+	xmlns:android
+		ADDED from D:\Andy\android_project\nsc_nice\Translator\models\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest14366003298943655498.xml:2:23-81
+uses-sdk
+INJECTED from D:\Andy\android_project\nsc_nice\Translator\models\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest14366003298943655498.xml reason: use-sdk injection requested
+INJECTED from D:\Andy\android_project\nsc_nice\Translator\models\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest14366003298943655498.xml
+INJECTED from D:\Andy\android_project\nsc_nice\Translator\models\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest14366003298943655498.xml
+INJECTED from D:\Andy\android_project\nsc_nice\Translator\models\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest14366003298943655498.xml
+INJECTED from D:\Andy\android_project\nsc_nice\Translator\models\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest14366003298943655498.xml
+	android:targetSdkVersion
+		INJECTED from D:\Andy\android_project\nsc_nice\Translator\models\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest14366003298943655498.xml
+		ADDED from D:\Andy\android_project\nsc_nice\Translator\models\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest14366003298943655498.xml
+		INJECTED from D:\Andy\android_project\nsc_nice\Translator\models\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest14366003298943655498.xml
+	android:minSdkVersion
+		INJECTED from D:\Andy\android_project\nsc_nice\Translator\models\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest14366003298943655498.xml
+		ADDED from D:\Andy\android_project\nsc_nice\Translator\models\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest14366003298943655498.xml
+		INJECTED from D:\Andy\android_project\nsc_nice\Translator\models\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest14366003298943655498.xml
