@@ -18,12 +18,27 @@ android {
 }
 
 tasks.register('genUUID') {
-    def uuid = UUID.randomUUID().toString()
-    def odir = file("$buildDir/generated/assets/model-en-us")
-    def ofile = file("$odir/uuid")
+//    def uuid = UUID.randomUUID().toString()
+//    def odir = file("$buildDir/generated/assets/model-en-us")
+//    def ofile = file("$odir/uuid")
+//    doLast {
+//        mkdir odir
+//        ofile.text = uuid
+//    }
     doLast {
-        mkdir odir
-        ofile.text = uuid
+        // 为英文模型生成UUID
+        def uuidEn = UUID.randomUUID().toString()
+        def odirEn = file("$buildDir/generated/assets/model-en-us")
+        def ofileEn = file("$odirEn/uuid")
+        mkdir odirEn
+        ofileEn.text = uuidEn
+
+        // 为中文模型生成UUID
+        def uuidCn = UUID.randomUUID().toString()
+        def odirCn = file("$buildDir/generated/assets/vosk-model-small-cn-0.22")
+        def ofileCn = file("$odirCn/uuid")
+        mkdir odirCn
+        ofileCn.text = uuidCn
     }
 }
 
