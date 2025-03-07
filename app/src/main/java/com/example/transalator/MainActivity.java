@@ -250,8 +250,18 @@ public class MainActivity extends AppCompatActivity {
                         // 使用更精确的方式提取JSON中的text字段
                         if (hypothesis.contains("\"text\"")) {
                             // 提取text字段的值并声明为final
-                            final String text = hypothesis.replaceAll(".*\"text\"\\s*:\\s*\"([^\"]*)\".*", "$1")
-                                    .replace("{", "").replace("}", "").replace(" ", "");
+                            String extractedText = hypothesis.replaceAll(".*\"text\"\\s*:\\s*\"([^\"]*)\".*", "$1")
+                                    .replace("{", "").replace("}", "");
+                            
+                            // 根据翻译方向决定是否去除空格
+                            final String text;
+                            if (isChineseToEnglish) {
+                                // 中文到英文，去除空格
+                                text = extractedText.replace(" ", "");
+                            } else {
+                                // 英文到中文，保留空格
+                                text = extractedText;
+                            }
 
                             // 确保在UI线程更新EditText
                             runOnUiThread(() -> {
