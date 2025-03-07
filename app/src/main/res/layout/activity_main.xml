@@ -87,13 +87,14 @@
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/circle_button_background"
                 android:contentDescription="语音输入"
+                android:visibility="gone"
                 android:src="@drawable/ic_mic" />
 
             <Button
                 android:id="@+id/holdToSpeakButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Vosk识别语音"
+                android:text="点击说话"
                 android:layout_marginRight="10dp"
                 android:contentDescription="按住说话"
                 android:textSize="16sp"/>
