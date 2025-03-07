@@ -251,8 +251,8 @@ public class MainActivity extends AppCompatActivity {
                         if (hypothesis.contains("\"text\"")) {
                             // 提取text字段的值并声明为final
                             String extractedText = hypothesis.replaceAll(".*\"text\"\\s*:\\s*\"([^\"]*)\".*", "$1")
-                                    .replace("{", "").replace("}", "");
-
+                                    .replace("{", "").replace("}", "")
+                                    .replace("\n", "").replace("\r", ""); // 去除所有换行符和回车符
                             // 根据翻译方向决定是否去除空格
                             final String text;
                             if (isChineseToEnglish) {
