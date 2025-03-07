@@ -93,7 +93,7 @@
                 android:id="@+id/holdToSpeakButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Vosk按住说话"
+                android:text="Vosk识别语音"
                 android:layout_marginRight="10dp"
                 android:contentDescription="按住说话"
                 android:textSize="16sp"/>
