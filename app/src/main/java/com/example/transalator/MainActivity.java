@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPartialResult(String hypothesis) {
                 // 记录原始数据到resultView
-                resultView.append("部分结果: " + hypothesis + "\n");
+              //  resultView.append("部分结果: " + hypothesis + "\n");
 
                 // 提取部分识别结果
                 if (hypothesis != null && !hypothesis.isEmpty()) {
@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResult(String hypothesis) {
                 // Vosk 的识别结果处理
                 // 记录原始数据到resultView
-                resultView.append("结果: " + hypothesis + "\n");
+             //   resultView.append("结果: " + hypothesis + "\n");
 
                 // 提取识别结果
                 if (hypothesis != null && !hypothesis.isEmpty()) {
@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFinalResult(String hypothesis) {
                 // 记录原始数据到resultView
-                resultView.append("最终结果: " + hypothesis + "\n");
+               // resultView.append("最终结果: " + hypothesis + "\n");
 
                 // 提取最终识别结果
                 if (hypothesis != null && !hypothesis.isEmpty()) {
@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
                             // 提取text字段的值并声明为final
                             String extractedText = hypothesis.replaceAll(".*\"text\"\\s*:\\s*\"([^\"]*)\".*", "$1")
                                     .replace("{", "").replace("}", "");
-                            
+
                             // 根据翻译方向决定是否去除空格
                             final String text;
                             if (isChineseToEnglish) {
@@ -385,7 +385,8 @@ public class MainActivity extends AppCompatActivity {
                 buttonSpeak.setEnabled(true);
                 break;
             case STATE_MIC:
-                resultView.setText("请说话...");
+                //resultView.setText("请说话...");
+                resultView.setText("Vosk模型准备就绪，请按住按钮说话");
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + state);
