@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Offline Translator</string>
+    <string name="app_title">Offline Chinese-English Translator</string>
+    <string name="chinese_to_english">Chinese → English</string>
+    <string name="english_to_chinese">English → Chinese</string>
+    <string name="input_label">Input Text:</string>
+    <string name="input_hint">Enter text or use voice recognition</string>
+    <string name="hold_to_speak">click to Speak</string>
+    <string name="stop_speak">Stop talking</string>
+    <string name="translate">Translate</string>
+    <string name="translation_result">Translation Result:</string>
+    <string name="voice_input">Voice Input</string>
+    <string name="preparing_vosk_model">Preparing Vosk model...</string>
+    <string name="vosk_model_ready">Vosk model is ready, please press and hold the button to speak</string>
+    <string name="chinese_to_english_model_download_failed">Download of Chinese-English model failed</string>
+    <string name="english_to_chinese_model_download_failed">English-Chinese model download failed</string>
+    <string name="please_speak">Please speak... </string>
+    <string name="device_no_support">Your device does not support speech recognition: </string>
+    <string name="translation_failed">Translation failed: </string>
+    <string name="device_not_support_offline">Your device may not support offline</string>
+    <string name="chinese">Chinese</string>
+    <string name="english">English</string>
+    <string name="download_voice_package">If you need voice recognition, please download the corresponding voice package</string>
+    <string name="need_to_download_package">Need to download speech recognition package</string>
+    <string name="download_it_now">In order to support offline speech recognition, you need to download the speech recognition package. Do you want to download it now?</string>
+    <string name="download">Download</string>
+    <string name="unable_open_voice_settings">Unable to open the voice settings, please manually go to Settings->Language and input method to download the voice package</string>
+    <string name="cancel">Cancel</string>
+    <string name="need_microphone_permission">Microphone permission is required to use speech recognition</string>
+    <string name="audio_error">Audio Error</string>
+    <string name="client_error">Client Error</string>
+    <string name="insufficient_permissions">Insufficient Permissions</string>
+    <string name="network_error">Network Error</string>
+    <string name="network_timeout">Network Timeout</string>
+    <string name="no_matching_results">No matching results</string>
+    <string name="identifier_busy">Identifier busy</string>
+    <string name="server_error">Server Error</string>
+    <string name="voice_timeout">Voice timeout</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="speech_recognition_error">Speech recognition error</string>
+</resources>

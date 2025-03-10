@@ -77,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
     private Translator chineseEnglishTranslator;
     private Translator englishChineseTranslator;
     private org.vosk.android.RecognitionListener voskListener;
+    private Button languageToggleButton;
+    private boolean isEnglish = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +95,17 @@ public class MainActivity extends AppCompatActivity {
         chineseToEnglish = findViewById(R.id.chineseToEnglish); //中文转英文radio按钮
         englishToChinese = findViewById(R.id.englishToChinese); //英文转中文radio
         resultView = findViewById(R.id.result_text);    //vosk语音包生成结果
+        languageToggleButton = findViewById(R.id.languageToggleButton);
+
+        // 设置语言切换按钮点击事件
+        languageToggleButton.setOnClickListener(v -> {
+            isEnglish = !isEnglish;
+            languageToggleButton.setText(isEnglish ? "EN" : "CN");
+            // 切换应用语言
+            Context context = LocaleHelper.setLocale(this, isEnglish ? "en" : "");
+            // 重新创建Activity以应用新的语言设置
+            recreate();
+        });
 
         // 检查并下载离线语音识别包
         checkAndDownloadOfflineRecognitionModels();
@@ -138,18 +152,18 @@ public class MainActivity extends AppCompatActivity {
 
         // 设置按住说话按钮的触摸事件
         // 修改为点击说话按钮
-        buttonSpeak.setText("点击说话");
+        buttonSpeak.setText(R.string.hold_to_speak);
         buttonSpeak.setOnClickListener(v -> {
             if (speechService != null) {
                 // 如果正在录音，则停止
                 speechService.stop();
                 speechService = null;
-                buttonSpeak.setText("点击说话");
+                buttonSpeak.setText(R.string.hold_to_speak);
                 setUiState(STATE_DONE);
             } else {
                 // 开始录音
                 recognizeMicrophone();
-                buttonSpeak.setText("停止说话");
+                buttonSpeak.setText(R.string.stop_speak);
             }
         });
 
@@ -161,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!text.isEmpty()) {
                     translateText(text);
                 } else {
-                    Toast.makeText(MainActivity.this, "请输入或说出要翻译的文本", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, R.string.input_hint, Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
                     intent.setAction("android.settings.VOICE_INPUT_SETTINGS");
                     startActivity(intent);
@@ -287,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // 重置按钮文字
                 runOnUiThread(() -> {
-                    buttonSpeak.setText("点击说话");
+                    buttonSpeak.setText(R.string.hold_to_speak);
                 });
             }
 
@@ -374,11 +388,11 @@ public class MainActivity extends AppCompatActivity {
     private void setUiState(int state) {
         switch (state) {
             case STATE_START:
-                resultView.setText("正在准备Vosk模型...");
+                resultView.setText(R.string.preparing_vosk_model);
                 buttonSpeak.setEnabled(false);
                 break;
             case STATE_READY:
-                resultView.setText("Vosk模型准备就绪，请按住按钮说话");
+                resultView.setText(R.string.vosk_model_ready);
                 buttonSpeak.setEnabled(true);
                 break;
             case STATE_DONE:
@@ -386,7 +400,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case STATE_MIC:
                 //resultView.setText("请说话...");
-                resultView.setText("Vosk模型准备就绪，请按住按钮说话");
+                resultView.setText(R.string.vosk_model_ready);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + state);
@@ -419,7 +433,7 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> {
                     // 模型下载失败
-                    Toast.makeText(MainActivity.this, "中译英模型下载失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, R.string.chinese_to_english + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
 
         // 创建英译中翻译器
@@ -436,7 +450,7 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> {
                     // 模型下载失败
-                    Toast.makeText(MainActivity.this, "英译中模型下载失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, R.string.english_to_chinese + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -458,12 +472,12 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en-US");
         }
 
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "请说话...");
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, R.string.please_speak);
 
         try {
             startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
         } catch (Exception e) {
-            Toast.makeText(this, "您的设备不支持语音识别: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.device_no_support + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -483,8 +497,8 @@ public class MainActivity extends AppCompatActivity {
         translator.translate(text)
                 .addOnSuccessListener(translatedText::setText)
                 .addOnFailureListener(e -> {
-                    translatedText.setText("翻译失败: " + e.getMessage());
-                    Toast.makeText(MainActivity.this, "翻译失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    translatedText.setText(R.string.translation_failed + e.getMessage());
+                    Toast.makeText(MainActivity.this, R.string.translation_failed + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -500,9 +514,9 @@ public class MainActivity extends AppCompatActivity {
                     ArrayList<String> supported = results.getStringArrayList(RecognizerIntent.EXTRA_SUPPORTED_LANGUAGES);
                     if (supported != null && !supported.contains(languageCode)) {
                         // 如果不支持该语言，提示下载
-                        Toast.makeText(MainActivity.this, "您的设备可能不支持离线" +
-                                (languageCode.equals("zh-CN") ? "中文" : "英文") +
-                                "语音识别，请下载相应语音包", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, R.string.device_not_support_offline +
+                                (languageCode.equals("zh-CN") ? R.string.chinese : R.string.english) +
+                                R.string.download_voice_package, Toast.LENGTH_LONG).show();
 
                         // 提示用户下载语音包
                         new Handler().postDelayed(() -> showDownloadDialog(), 1000);
@@ -575,19 +589,19 @@ public class MainActivity extends AppCompatActivity {
     // 显示下载对话框的辅助方法
     private void showDownloadDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("需要下载语音识别包")
-                .setMessage("为了支持离线语音识别，需要下载语音识别包。是否现在下载？")
-                .setPositiveButton("下载", (dialog, which) -> {
+        builder.setTitle(R.string.need_to_download_package)
+                .setMessage(R.string.download_it_now)
+                .setPositiveButton(R.string.download, (dialog, which) -> {
                     try {
                         // 尝试直接打开语音设置
                         Intent intent = new Intent();
                         intent.setAction("android.settings.VOICE_INPUT_SETTINGS");
                         startActivity(intent);
                     } catch (Exception e) {
-                        Toast.makeText(this, "无法打开语音设置，请手动前往设置->语言和输入法下载语音包", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, R.string.unable_open_voice_settings, Toast.LENGTH_LONG).show();
                     }
                 })
-                .setNegativeButton("取消", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -614,7 +628,7 @@ public class MainActivity extends AppCompatActivity {
                 startSpeechRecognition();
                 initModel();
             } else {
-                Toast.makeText(this, "需要麦克风权限才能使用语音识别功能", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.need_microphone_permission, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -648,37 +662,37 @@ public class MainActivity extends AppCompatActivity {
                     String errorMessage;
                     switch (error) {
                         case SpeechRecognizer.ERROR_AUDIO:
-                            errorMessage = "音频错误";
+                            errorMessage = String.valueOf(R.string.audio_error);
                             break;
                         case SpeechRecognizer.ERROR_CLIENT:
-                            errorMessage = "客户端错误";
+                            errorMessage = String.valueOf(R.string.client_error);
                             break;
                         case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
-                            errorMessage = "权限不足";
+                            errorMessage = String.valueOf(R.string.insufficient_permissions);
                             break;
                         case SpeechRecognizer.ERROR_NETWORK:
-                            errorMessage = "网络错误";
+                            errorMessage =  String.valueOf(R.string.network_error);
                             break;
                         case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
-                            errorMessage = "网络超时";
+                            errorMessage = String.valueOf(R.string.network_timeout);
                             break;
                         case SpeechRecognizer.ERROR_NO_MATCH:
-                            errorMessage = "没有匹配的结果";
+                            errorMessage = String.valueOf(R.string.no_matching_results);
                             break;
                         case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
-                            errorMessage = "识别器忙";
+                            errorMessage = String.valueOf(R.string.identifier_busy);
                             break;
                         case SpeechRecognizer.ERROR_SERVER:
-                            errorMessage = "服务器错误";
+                            errorMessage = String.valueOf(R.string.server_error);
                             break;
                         case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
-                            errorMessage = "语音超时";
+                            errorMessage = String.valueOf(R.string.voice_timeout);
                             break;
                         default:
-                            errorMessage = "未知错误";
+                            errorMessage = String.valueOf(R.string.unknown_error);
                             break;
                     }
-                    Toast.makeText(MainActivity.this, "语音识别错误: " + errorMessage, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, R.string.speech_recognition_error + errorMessage, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override

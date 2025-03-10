@@ -15,12 +15,23 @@
             android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="离线中英文翻译器"
-            android:textSize="24sp"
+            android:text="@string/app_title"
+            android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/languageToggleButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:text="EN"
+            android:textSize="14sp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toTopOf="@id/titleTextView"
+            app:layout_constraintBottom_toBottomOf="@id/titleTextView"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <RadioGroup
             android:id="@+id/translationDirection"
@@ -35,7 +46,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="中文 → 英文" />
+                android:text="@string/chinese_to_english" />
 
             <RadioButton
                 android:id="@+id/englishToChinese"
@@ -43,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checked="true"
-                android:text="英文 → 中文" />
+                android:text="@string/english_to_chinese" />
         </RadioGroup>
 
         <TextView
@@ -51,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="输入文本:"
+            android:text="@string/input_label"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -64,7 +75,7 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/edit_text_background"
             android:gravity="top|start"
-            android:hint="输入或通过语音识别输入文本"
+            android:hint="@string/input_hint"
             android:inputType="textMultiLine"
             android:padding="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -86,7 +97,7 @@
                 android:layout_height="60dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/circle_button_background"
-                android:contentDescription="语音输入"
+                android:contentDescription="@string/voice_input"
                 android:visibility="gone"
                 android:src="@drawable/ic_mic" />
 
@@ -94,15 +105,15 @@
                 android:id="@+id/holdToSpeakButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="点击说话"
+                android:text="@string/hold_to_speak"
                 android:layout_marginRight="10dp"
-                android:contentDescription="按住说话"
+                android:contentDescription="@string/hold_to_speak"
                 android:textSize="16sp"/>
         <Button
             android:id="@+id/translateButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="翻译"
+            android:text="@string/translate"
             android:textSize="16sp" />
         </LinearLayout>
 
@@ -111,7 +122,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="翻译结果:"
+            android:text="@string/translation_result"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
